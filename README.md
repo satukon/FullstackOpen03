@@ -1,10 +1,7 @@
 # FullstackOpen03
 Osion 3 tehtävät
 
-Internetissä oleva backend: 
+Internetissä oleva sovellus: 
 https://puhelinluettelo-566m.onrender.com/
-
-Data:
-https://puhelinluettelo-566m.onrender.com/api/persons/
 
 (käytetty Renderiä) 
