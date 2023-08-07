@@ -1,42 +1,42 @@
-require('dotenv').config();
+require('dotenv').config()
 
-const Contact = require('./models/person');
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const morgan = require('morgan');
+const Contact = require('./models/person')
+const express = require('express')
+const app = express()
+const cors = require('cors')
+const morgan = require('morgan')
 
-app.use(express.json());
-app.use(cors());
-app.use(express.static('build'));
+app.use(express.json())
+app.use(cors())
+app.use(express.static('build'))
 
 
 //morgan
-morgan.token('requestData', (req, res) => {
-    return JSON.stringify(req.body);
-});
+morgan.token('requestData', (req) => {
+  return JSON.stringify(req.body)
+})
 
-const customLogFormat = ':method :url :status :res[content-length] - :response-time ms :requestData';
-app.use(morgan(customLogFormat, { stream: { write: (message) => console.log(message.trim()) } }));
+const customLogFormat = ':method :url :status :res[content-length] - :response-time ms :requestData'
+app.use(morgan(customLogFormat, { stream: { write: (message) => console.log(message.trim()) } }))
 
 //info sivu
-app.get('/api/info', (request, response, next) => {
-  const currentTime = new Date().toString();
+app.get('/api/info', (response, next) => {
+  const currentTime = new Date().toString()
   Contact.find({})
     .then(persons => {
-      response.send('Phonebook has info for ' + persons.length + ' people <p>' + currentTime);
+      response.send('Phonebook has info for ' + persons.length + ' people <p>' + currentTime)
     })
-    .catch(error => next(error)); 
-});
+    .catch(error => next(error))
+})
 
 //kontaktien haku
-app.get('/api/persons', (request, response, next) => {
+app.get('/api/persons', (response, next) => {
   Contact.find({})
-      .then(persons => {
-          response.json(persons);
-      })
-      .catch(error => next(error)); 
-});
+    .then(persons => {
+      response.json(persons)
+    })
+    .catch(error => next(error))
+})
 
 //kontaktin haku id:llä
 app.get('/api/persons/:id', (request, response, next) => {
@@ -64,13 +64,13 @@ app.post('/api/persons', (request, response, next) => {
     .then(savedContact => {
       response.json(savedContact)
     })
-    .catch(error => next(error));
-});
+    .catch(error => next(error))
+})
 
 //kontaktin poisto
 app.delete('/api/persons/:id', (request, response, next) => {
   Contact.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -79,11 +79,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
-  Contact.findByIdAndUpdate(
-    request.params.id, 
-    { name, number },
-    { new: true, runValidators: true, context: 'query' }
-  ) 
+  Contact.findByIdAndUpdate(request.params.id, { name, number }, { new: true, runValidators: true, context: 'query' })
     .then(updatedContact => {
       response.json(updatedContact)
     })
@@ -109,11 +105,11 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-app.use(errorHandler);
+app.use(errorHandler)
 
 
 //serverin käynnistys ja kuuntelu
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
