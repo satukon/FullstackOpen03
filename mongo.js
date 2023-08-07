@@ -26,7 +26,6 @@ if (process.argv.length === 3) {
         mongoose.connection.close()
     })
 }
-
 else if (process.argv.length === 5) {
 
     mongoose.connect(url)
