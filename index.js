@@ -30,7 +30,7 @@ app.get('/api/info', (response, next) => {
 })
 
 //kontaktien haku
-app.get('/api/persons', (response, next) => {
+app.get('/api/persons', (reguest, response, next) => {
   Contact.find({})
     .then(persons => {
       response.json(persons)
